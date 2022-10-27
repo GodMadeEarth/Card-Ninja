@@ -37,5 +37,6 @@ public class Player_Movement_Logic : MonoBehaviour
         player_Movement_Vect = player_Movement_Vect.normalized * player_Speed;
 
         transform.position += player_Movement_Vect * Time.deltaTime;
+        
     }
 }
