@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class SmoothAxisMovement
 {
-    
+
 
     public static Vector3 Calculate(Vector3 targetVect,Vector3 velocityVect)
     {
@@ -15,7 +15,7 @@ public static class SmoothAxisMovement
         Vector3 targetAngle = targetVect.normalized;
         float targetSpeed = Vector3.Distance(Vector3.zero, targetVect);
 
-        float rotateRate = 0.05f;
+        float rotateRate = 0.07f;
         float accelRate = 0.05f;
         float decelRate = 0.1f;
 
@@ -29,7 +29,11 @@ public static class SmoothAxisMovement
         else 
         {
             velocityAngle += targetAngle * rotateRate;
-
+            velocityAngle = velocityAngle.normalized;
+            if(Vector3.Angle(targetAngle , velocityAngle) > 80)
+            {
+                velocitySpeed -= decelRate;
+            }
         }
 
         if (targetSpeed > velocitySpeed)
@@ -55,4 +59,6 @@ public static class SmoothAxisMovement
         cout = Mathf.Max(num2, num1) - Mathf.Min(num1, num2);
         return cout;
     }
+
+   
 }
