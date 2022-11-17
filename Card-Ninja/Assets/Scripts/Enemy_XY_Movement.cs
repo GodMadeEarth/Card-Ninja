@@ -1,9 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[System.Serializable]
+public struct TestSettings { public int health;
+    public int maxHealth; }
 public class Enemy_XY_Movement : MonoBehaviour
 {
+    public TestSettings settings;
+
+    [Header("Test Settings")]
     public float speed = 3;
     public float playerDistance = 3;
 
@@ -40,14 +45,30 @@ public class Enemy_XY_Movement : MonoBehaviour
 
         // Circle Player
         tempIntrest = GameObject.Find("Player").transform.position - transform.position;
-        tempIntrest = new Vector3(tempIntrest.y, -tempIntrest.x);
+        tempIntrest = new Vector3(-tempIntrest.y, tempIntrest.x);
         intrestVects.Add(tempIntrest);
 
 
         foreach (var intrests in intrestVects)
         {
-                targetVect += intrests;
+            targetVect += intrests;
         }
+
+        targetVect = targetVect.normalized;
+
+        
+        Debug.LogError((GameObject.Find("Main Camera").GetComponent<Camera>().WorldToViewportPoint(transform.position) + new Vector3(-0.5f, -0.5f)) * 2);
+        if (0.6f < Vector3.Distance(new Vector3(0,0,20), (GameObject.Find("Main Camera").GetComponent<Camera>().WorldToViewportPoint(transform.position) + new Vector3(-0.5f, -0.5f)) * 2))
+        {
+            targetVect = (targetVect-transform.position.normalized).normalized;
+        }
+            
+
+
+        
+
+
+
 
 
 
