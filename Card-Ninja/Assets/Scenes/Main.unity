@@ -551,9 +551,10 @@ GameObject:
   m_Component:
   - component: {fileID: 524718948}
   - component: {fileID: 524718949}
+  - component: {fileID: 524718950}
   m_Layer: 0
   m_Name: Unknown
-  m_TagString: Untagged
+  m_TagString: Enemies
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -584,17 +585,93 @@ MonoBehaviour:
   m_GameObject: {fileID: 524718946}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fce6aa814c707442bff56a9b029b724, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f3f55e94fff2534d9bb2680ea8ac143, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Basic:
     behaviorId: 0
+    enabled: 1
+    globalTarget: Player
+    speed: 3
+  Aproach:
+    enabled: 1
+    strength: 2
+    localTarget: 
+    Advanced:
+      enabled: 1
+      baseline: 2
+      activeAbove: 1
+      triggerInactive: 1
+      triggeredBehaviorId: 1
+  Flee:
+    enabled: 1
+    strength: 1
+    localTarget: Enemies
+    Advanced:
+      enabled: 1
+      baseline: 3
+      activeAbove: 0
+      triggerInactive: 0
+      triggeredBehaviorId: 0
+  Circle:
     enabled: 0
-    globalTarget: 
-    speed: 0
-  Aproach: []
-  Flee: []
-  Circle: []
+    clockwise: 0
+    strength: 0
+    localTarget: 
+    Advanced:
+      enabled: 0
+      baseline: 0
+      activeAbove: 0
+      triggerInactive: 0
+      triggeredBehaviorId: 0
+--- !u!114 &524718950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 524718946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f3f55e94fff2534d9bb2680ea8ac143, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Basic:
+    behaviorId: 1
+    enabled: 0
+    globalTarget: Player
+    speed: 3
+  Aproach:
+    enabled: 0
+    strength: 0
+    localTarget: 
+    Advanced:
+      enabled: 0
+      baseline: 0
+      activeAbove: 0
+      triggerInactive: 0
+      triggeredBehaviorId: 0
+  Flee:
+    enabled: 1
+    strength: 1
+    localTarget: 
+    Advanced:
+      enabled: 1
+      baseline: 8
+      activeAbove: 0
+      triggerInactive: 1
+      triggeredBehaviorId: 0
+  Circle:
+    enabled: 0
+    clockwise: 0
+    strength: 0
+    localTarget: 
+    Advanced:
+      enabled: 0
+      baseline: 0
+      activeAbove: 0
+      triggerInactive: 0
+      triggeredBehaviorId: 0
 --- !u!1 &739429250
 GameObject:
   m_ObjectHideFlags: 0

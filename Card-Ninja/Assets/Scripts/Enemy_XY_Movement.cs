@@ -75,6 +75,6 @@ public class Enemy_XY_Movement : MonoBehaviour
         velocityVect = SmoothAxisMovement.Calculate(targetVect.normalized, velocityVect);
 
 
-        transform.position += velocityVect * speed * Time.deltaTime;
+        transform.position += targetVect * speed * Time.deltaTime;
     }
 }
