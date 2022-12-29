@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MoveLogic : MonoBehaviour
@@ -11,127 +13,141 @@ public class MoveLogic : MonoBehaviour
 
     public BasicSettings Basic = new BasicSettings();
 
-    public LineMoveSettings Aproach = new LineMoveSettings();
+    public List<LineMoveSettings> Aproach;
 
-    public LineMoveSettings Flee = new LineMoveSettings();
+    public List<LineMoveSettings> Flee;
 
-    public CircleMoveSettings Circle = new CircleMoveSettings();
+    public List<CircleMoveSettings> Circle;
+
+
 
     // Update is called once per frame
     void FixedUpdate()
     {
-
-        if (Basic.enabled && Aproach.enabled)
+        foreach (var aproach in Aproach)
         {
-            if (Aproach.localTarget == string.Empty)
+            if (Basic.enabled && aproach.enabled)
             {
-                targetObject = ClosestObject(GameObject.FindGameObjectsWithTag(Basic.globalTarget), gameObject);
-            }
-            else
-            {
-                targetObject = ClosestObject(GameObject.FindGameObjectsWithTag(Aproach.localTarget), gameObject);
-            }
-            if (Aproach.Advanced.enabled)
-            {
-                if (PassedBaseline(Aproach.Advanced.activeAbove, Aproach.Advanced.baseline, Aproach.Advanced.triggerInactive, Aproach.Advanced.triggeredBehaviorId))
+                if (aproach.localTarget == string.Empty)
                 {
-                    targetVector += (targetObject.transform.position - gameObject.transform.position).normalized * Aproach.strength;
-                    totalWeights += Aproach.strength;
-                }        
-            }
-            else
-            {
-                targetVector += (targetObject.transform.position - gameObject.transform.position).normalized * Aproach.strength;
-                totalWeights += Aproach.strength;
-            }
-            
-
-        }
-        if (Basic.enabled && Flee.enabled)
-        {
-            if (Flee.localTarget == string.Empty)
-            {
-                targetObject = ClosestObject(GameObject.FindGameObjectsWithTag(Basic.globalTarget), gameObject);
-            }
-            else
-            {
-                targetObject = ClosestObject(GameObject.FindGameObjectsWithTag(Flee.localTarget), gameObject);
-            }
-
-            if (Flee.Advanced.enabled)
-            {
-                if (PassedBaseline(Flee.Advanced.activeAbove, Flee.Advanced.baseline, Flee.Advanced.triggerInactive, Flee.Advanced.triggeredBehaviorId))
-                {
-                    targetVector += -(targetObject.transform.position - gameObject.transform.position).normalized * Flee.strength;
-                    totalWeights += Flee.strength;
-                }
-            }
-            else
-            {
-                targetVector += -(targetObject.transform.position - gameObject.transform.position).normalized * Flee.strength;
-                totalWeights += Flee.strength;
-            }
-
-        }
-        if (Basic.enabled && Circle.enabled)
-        {
-            if (Circle.localTarget == string.Empty)
-            {
-                targetObject = ClosestObject(GameObject.FindGameObjectsWithTag(Basic.globalTarget), gameObject);
-            }
-            else
-            {
-                targetObject = ClosestObject(GameObject.FindGameObjectsWithTag(Circle.localTarget), gameObject);
-            }
-
-            if (Circle.Advanced.enabled)
-            {
-                if (PassedBaseline(Circle.Advanced.activeAbove, Circle.Advanced.baseline, Circle.Advanced.triggerInactive, Circle.Advanced.triggeredBehaviorId))
-                {
-                    if (Circle.clockwise)
-                    {
-                        targetVector += Quaternion.Euler(0, 0, 90) * (targetObject.transform.position - gameObject.transform.position).normalized * Circle.strength;
-                        totalWeights += Circle.strength;
-                    }
-                    else
-                    {
-                        targetVector += Quaternion.Euler(0, 0, -90) * (targetObject.transform.position - gameObject.transform.position).normalized * Circle.strength;
-                        totalWeights += Circle.strength;
-                    }
-                }
-
-            }
-            else
-            {
-                if (Circle.clockwise)
-                {
-                    targetVector += Quaternion.Euler(0, 0, 90) * (targetObject.transform.position - gameObject.transform.position).normalized * Circle.strength;
-                    totalWeights += Circle.strength;
+                    targetObject = ClosestObject(GameObject.FindGameObjectsWithTag(Basic.globalTarget), gameObject);
                 }
                 else
                 {
-                    targetVector += Quaternion.Euler(0, 0, -90) * (targetObject.transform.position - gameObject.transform.position).normalized * Circle.strength;
-                    totalWeights += Circle.strength;
+                    targetObject = ClosestObject(GameObject.FindGameObjectsWithTag(aproach.localTarget), gameObject);
                 }
+                if (aproach.Advanced.enabled)
+                {
+                    if (PassedBaseline(aproach.Advanced.activeAbove, aproach.Advanced.baseline, aproach.Advanced.triggerInactive, aproach.Advanced.triggeredBehaviorId))
+                    {
+                        targetVector += (targetObject.transform.position - gameObject.transform.position).normalized * aproach.strength;
+                        totalWeights += aproach.strength;
+                    }
+                }
+                else
+                {
+                    targetVector += (targetObject.transform.position - gameObject.transform.position).normalized * aproach.strength;
+                    totalWeights += aproach.strength;
+                }
+
+
             }
-
-            
-            
-
         }
+        foreach (var flee in Flee)
+        {
+            if (Basic.enabled && flee.enabled)
+            {
+                if (flee.localTarget == string.Empty)
+                {
+                    targetObject = ClosestObject(GameObject.FindGameObjectsWithTag(Basic.globalTarget), gameObject);
+                }
+                else
+                {
+                    targetObject = ClosestObject(GameObject.FindGameObjectsWithTag(flee.localTarget), gameObject);
+                }
+
+                if (flee.Advanced.enabled)
+                {
+                    if (PassedBaseline(flee.Advanced.activeAbove, flee.Advanced.baseline, flee.Advanced.triggerInactive, flee.Advanced.triggeredBehaviorId))
+                    {
+                        targetVector += -(targetObject.transform.position - gameObject.transform.position).normalized * flee.strength;
+                        totalWeights += flee.strength;
+                    }
+                }
+                else
+                {
+                    targetVector += -(targetObject.transform.position - gameObject.transform.position).normalized * flee.strength;
+                    totalWeights += flee.strength;
+                }
+
+            }
+        }
+        foreach (var circle in Circle)
+        {
+            if (Basic.enabled && circle.enabled)
+            {
+                if (circle.localTarget == string.Empty)
+                {
+                    targetObject = ClosestObject(GameObject.FindGameObjectsWithTag(Basic.globalTarget), gameObject);
+                }
+                else
+                {
+                    targetObject = ClosestObject(GameObject.FindGameObjectsWithTag(circle.localTarget), gameObject);
+                }
+
+                if (circle.Advanced.enabled)
+                {
+                    if (PassedBaseline(circle.Advanced.activeAbove, circle.Advanced.baseline, circle.Advanced.triggerInactive, circle.Advanced.triggeredBehaviorId))
+                    {
+                        if (circle.clockwise)
+                        {
+                            targetVector += Quaternion.Euler(0, 0, 75) * (targetObject.transform.position - gameObject.transform.position).normalized * circle.strength;
+                            totalWeights += circle.strength;
+                        }
+                        else
+                        {
+                            targetVector += Quaternion.Euler(0, 0, -75) * (targetObject.transform.position - gameObject.transform.position).normalized * circle.strength;
+                            totalWeights += circle.strength;
+                        }
+                    }
+
+                }
+                else
+                {
+                    if (circle.clockwise)
+                    {
+                        targetVector += Quaternion.Euler(0, 0, 75) * (targetObject.transform.position - gameObject.transform.position).normalized * circle.strength;
+                        totalWeights += circle.strength;
+                    }
+                    else
+                    {
+                        targetVector += Quaternion.Euler(0, 0, -75) * (targetObject.transform.position - gameObject.transform.position).normalized * circle.strength;
+                        totalWeights += circle.strength;
+                    }
+                }
+
+
+
+            }
+        }
+
+
 
         if (totalWeights != 0 && targetVector != Vector3.zero)
         {
             targetVector = targetVector / totalWeights;
+            
             totalWeights = 0;
         }
 
-        velocityVector = SmoothAxisMovement.Calculate(targetVector.normalized, velocityVector);
+        targetVector += EdgeAvoidance(0.9f) * 1.1f;
+
+        velocityVector = SmoothAxisMovement.Calculate(targetVector, velocityVector);
         transform.position += velocityVector * Basic.speed * Time.deltaTime;
 
         targetVector = Vector3.zero;
 
-
+        
 
     }
     GameObject ClosestObject(GameObject[] TargetedObjects, GameObject localObject)
@@ -151,7 +167,7 @@ public class MoveLogic : MonoBehaviour
         return closestTargetObject;
     }
 
-    private bool PassedBaseline(bool activeAbove,float baseline,bool triggerInactive,int triggeredBehaviorId)
+    bool PassedBaseline(bool activeAbove,float baseline,bool triggerInactive,int triggeredBehaviorId)
     {
         if (activeAbove == true && Vector3.Distance(targetObject.transform.position, gameObject.transform.position) > baseline)
         {
@@ -178,6 +194,22 @@ public class MoveLogic : MonoBehaviour
         {
             return false;
         }
+    }
+
+    Vector3 EdgeAvoidance(float bufferVal)
+    {
+        Vector3 correctionVector = Vector3.zero;
+
+        if (Screen.width / 62.7 * bufferVal < math.abs(transform.position.x)  )
+        {
+            correctionVector.x = -transform.position.x;
+        }
+        if (Screen.height / 62.7 * bufferVal < math.abs(transform.position.y))
+        {
+            correctionVector.y = -transform.position.y;
+        }
+
+        return correctionVector.normalized;
     }
 }
   

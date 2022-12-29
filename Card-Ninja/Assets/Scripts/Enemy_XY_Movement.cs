@@ -57,7 +57,7 @@ public class Enemy_XY_Movement : MonoBehaviour
         targetVect = targetVect.normalized;
 
         
-        Debug.LogError((GameObject.Find("Main Camera").GetComponent<Camera>().WorldToViewportPoint(transform.position) + new Vector3(-0.5f, -0.5f)) * 2);
+        
         if (0.6f < Vector3.Distance(new Vector3(0,0,20), (GameObject.Find("Main Camera").GetComponent<Camera>().WorldToViewportPoint(transform.position) + new Vector3(-0.5f, -0.5f)) * 2))
         {
             targetVect = (targetVect-transform.position.normalized).normalized;
