@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class TwoAxisPlayerMovement : MonoBehaviour
@@ -15,30 +16,29 @@ public class TwoAxisPlayerMovement : MonoBehaviour
     {
         inputVect = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
 
-
-        /*if(Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0)
-        {
-            if(Mathf.Abs(inputVect.x) > Mathf.Abs(inputVect.y))
-            {
-                inputVect.x = inputVect.y;
-            }
-            else if(Mathf.Abs(inputVect.y) > Mathf.Abs(inputVect.x))
-            {
-                inputVect.y = inputVect.x;
-            }
-
-        }
-
-
-        inputVect.Normalize();*/
+        inputVect += EdgeAvoidance(0.9f) * 1.1f;
+        
         velocityVect = SmoothAxisMovement.Calculate(inputVect, velocityVect);
         
         transform.position += velocityVect * Time.deltaTime * speed;
 
-        //Vector3 targetVect = transform.position + velocityVect * speed;
-
-
-        //transform.position = Vector3.MoveTowards(transform.position, targetVect, speed * Time.deltaTime);
-        //transform.position = Vector3.Lerp(transform.position, targetVect, Time.deltaTime);
+        
     }
+
+    Vector3 EdgeAvoidance(float bufferVal)
+    {
+        Vector3 correctionVector = Vector3.zero;
+
+        if (Screen.width / 62.7 * bufferVal < math.abs(transform.position.x))
+        {
+            correctionVector.x = -transform.position.x;
+        }
+        if (Screen.height / 62.7 * bufferVal < math.abs(transform.position.y))
+        {
+            correctionVector.y = -transform.position.y;
+        }
+
+        return correctionVector.normalized;
+    }
+
 }
